@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { isValidEmail, isValidPhone } from "@/lib/utils";
 import { mockLocations } from "@/lib/mockData";
+import { useLanguage } from "@/contexts/LanguageContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function UserRegistration() {
   const navigate = useNavigate();
@@ -15,6 +17,7 @@ export default function UserRegistration() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const locationId = queryParams.get("location") || "loc1";
+  const { t, isRTL } = useLanguage();
   
   const [formData, setFormData] = useState({
     name: "",
@@ -40,9 +43,9 @@ export default function UserRegistration() {
   
   const validate = () => {
     const newErrors = {
-      name: formData.name ? "" : "Name is required",
-      email: isValidEmail(formData.email) ? "" : "Valid email is required",
-      phone: isValidPhone(formData.phone) ? "" : "Valid phone number is required",
+      name: formData.name ? "" : t("registration.error.name"),
+      email: isValidEmail(formData.email) ? "" : t("registration.error.email"),
+      phone: isValidPhone(formData.phone) ? "" : t("registration.error.phone"),
     };
     
     setErrors(newErrors);
@@ -65,17 +68,21 @@ export default function UserRegistration() {
     } else {
       toast({
         variant: "destructive",
-        title: "Please check your information",
-        description: "Make sure all fields are filled correctly.",
+        title: t("registration.error.check"),
+        description: t("registration.error.description"),
       });
     }
   };
   
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-b from-twix-gold/30 to-white">
+      <div className="absolute top-4 right-4">
+        <LanguageSwitcher />
+      </div>
+      
       <Card className="w-full max-w-md border-twix-brown/20">
         <CardHeader className="bg-twix-red text-white rounded-t-lg">
-          <CardTitle className="text-center text-xl">Join the Twix Experience</CardTitle>
+          <CardTitle className="text-center text-xl">{t("registration.title")}</CardTitle>
         </CardHeader>
         <CardContent className="pt-6">
           {locationInfo && (
@@ -88,41 +95,41 @@ export default function UserRegistration() {
           
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name" className={isRTL ? "block text-right" : ""}>{t("registration.name")}</Label>
               <Input
                 id="name"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className={errors.name ? "border-red-500" : ""}
+                className={`${errors.name ? "border-red-500" : ""} ${isRTL ? "text-right" : ""}`}
               />
-              {errors.name && <p className="text-xs text-red-500">{errors.name}</p>}
+              {errors.name && <p className={`text-xs text-red-500 ${isRTL ? "text-right" : ""}`}>{errors.name}</p>}
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className={isRTL ? "block text-right" : ""}>{t("registration.email")}</Label>
               <Input
                 id="email"
                 name="email"
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={errors.email ? "border-red-500" : ""}
+                className={`${errors.email ? "border-red-500" : ""} ${isRTL ? "text-right" : ""}`}
               />
-              {errors.email && <p className="text-xs text-red-500">{errors.email}</p>}
+              {errors.email && <p className={`text-xs text-red-500 ${isRTL ? "text-right" : ""}`}>{errors.email}</p>}
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
+              <Label htmlFor="phone" className={isRTL ? "block text-right" : ""}>{t("registration.phone")}</Label>
               <Input
                 id="phone"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="+971 XX XXX XXXX"
-                className={errors.phone ? "border-red-500" : ""}
+                className={`${errors.phone ? "border-red-500" : ""} ${isRTL ? "text-right" : ""}`}
               />
-              {errors.phone && <p className="text-xs text-red-500">{errors.phone}</p>}
+              {errors.phone && <p className={`text-xs text-red-500 ${isRTL ? "text-right" : ""}`}>{errors.phone}</p>}
             </div>
           </form>
         </CardContent>
@@ -131,7 +138,7 @@ export default function UserRegistration() {
             onClick={handleSubmit} 
             className="w-full bg-twix-red hover:bg-twix-red/80"
           >
-            Next
+            {t("button.next")}
           </Button>
         </CardFooter>
       </Card>

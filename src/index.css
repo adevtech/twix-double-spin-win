@@ -96,6 +96,26 @@
   }
 }
 
+/* RTL Support */
+[dir="rtl"] .flip-x {
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] .rotate-180-rtl {
+  transform: rotate(180deg);
+}
+
+/* Make spacing symmetrical in RTL */
+[dir="rtl"] .ml-2 {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+[dir="rtl"] .mr-2 {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
 .spinning-wheel {
   transform-origin: center;
 }

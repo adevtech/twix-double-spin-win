@@ -1,12 +1,16 @@
+
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Prize } from "@/types";
 import { mockPrizes } from "@/lib/mockData";
 import { MailCheck } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function ThankYou() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   
   // Get the user data and prize from localStorage
   const userData = JSON.parse(localStorage.getItem("twixUserData") || "{}");
@@ -21,9 +25,13 @@ export default function ThankYou() {
   
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-b from-twix-gold/30 to-white">
+      <div className="absolute top-4 right-4">
+        <LanguageSwitcher />
+      </div>
+      
       <Card className="w-full max-w-md border-twix-brown/20">
         <CardHeader className="bg-twix-red text-white rounded-t-lg">
-          <CardTitle className="text-center text-xl">Thank You!</CardTitle>
+          <CardTitle className="text-center text-xl">{t("thanks.title")}</CardTitle>
         </CardHeader>
         <CardContent className="p-6 text-center space-y-6">
           <div className="flex justify-center">
@@ -34,13 +42,13 @@ export default function ThankYou() {
           
           <div className="space-y-3">
             <h3 className="text-lg font-bold text-twix-brown">
-              Your Prizes Have Been Sent!
+              {t("thanks.header")}
             </h3>
             
             {wonPrize && (
               <>
                 <p className="text-sm text-twix-brown/80">
-                  Two {wonPrize.name}s have been sent to your email address:
+                  {t("thanks.email").replace("{prize}", wonPrize.name)}
                 </p>
                 <p className="font-medium text-twix-brown">
                   {userData.email || "your email"}
@@ -49,8 +57,7 @@ export default function ThankYou() {
             )}
             
             <p className="text-sm text-twix-brown/80 mt-4">
-              Thank you for participating in the Twix Chocolate Campaign. 
-              We hope you enjoy your prizes!
+              {t("thanks.message")}
             </p>
           </div>
           
@@ -58,7 +65,7 @@ export default function ThankYou() {
             onClick={handleReset} 
             className="bg-twix-red hover:bg-twix-red/80"
           >
-            Done
+            {t("button.done")}
           </Button>
         </CardContent>
       </Card>

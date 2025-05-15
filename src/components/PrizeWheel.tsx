@@ -7,6 +7,8 @@ import { mockPrizes, selectRandomPrize } from "@/lib/mockData";
 import { spinWheel, generateConfetti } from "@/lib/utils";
 import { Prize } from "@/types";
 import { CheckCircle } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function PrizeWheel() {
   const navigate = useNavigate();
@@ -17,6 +19,7 @@ export default function PrizeWheel() {
   const [wheel2Rotation, setWheel2Rotation] = useState(0);
   const wheel1Ref = useRef<HTMLDivElement>(null);
   const wheel2Ref = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
   
   const handleSpin = () => {
     if (isSpinning) return;
@@ -67,6 +70,10 @@ export default function PrizeWheel() {
   
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-b from-twix-gold/30 to-white relative overflow-hidden">
+      <div className="absolute top-4 right-4">
+        <LanguageSwitcher />
+      </div>
+      
       {/* Confetti animation */}
       {confetti.map((item) => (
         <div
@@ -84,7 +91,7 @@ export default function PrizeWheel() {
       
       <Card className="w-full max-w-md border-twix-brown/20 mb-4">
         <CardHeader className="bg-twix-red text-white rounded-t-lg">
-          <CardTitle className="text-center text-xl">Spin the Twix Wheels</CardTitle>
+          <CardTitle className="text-center text-xl">{t("game.title")}</CardTitle>
         </CardHeader>
         <CardContent className="p-6 flex flex-col items-center">
           <div className="w-full flex justify-between mb-8">
@@ -162,10 +169,10 @@ export default function PrizeWheel() {
               <div className="p-4 bg-twix-gold/20 rounded-lg flex flex-col items-center">
                 <CheckCircle className="h-8 w-8 text-twix-red mb-2" />
                 <h3 className="text-lg font-bold text-twix-brown">
-                  Congratulations!
+                  {t("game.congrats")}
                 </h3>
                 <p className="text-sm text-twix-brown/80 mb-2">
-                  You won two {wonPrize.name}s!
+                  {t("game.wonPrize").replace("{prize}", wonPrize.name)}
                 </p>
                 <div className="flex justify-center space-x-4 mt-2">
                   <div className="h-16 w-16 bg-white rounded-lg p-2 flex items-center justify-center shadow-sm">
@@ -197,7 +204,7 @@ export default function PrizeWheel() {
                 onClick={handleContinue} 
                 className="bg-twix-red hover:bg-twix-red/80 w-full"
               >
-                Continue
+                {t("button.continue")}
               </Button>
             </div>
           ) : (
@@ -206,7 +213,7 @@ export default function PrizeWheel() {
               disabled={isSpinning}
               className="bg-twix-red hover:bg-twix-red/80 w-full"
             >
-              {isSpinning ? "Spinning..." : "Spin the Wheels!"}
+              {isSpinning ? t("button.spinning") : t("button.spin")}
             </Button>
           )}
         </CardContent>
